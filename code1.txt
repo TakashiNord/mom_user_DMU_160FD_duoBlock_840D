@@ -1,0 +1,138 @@
+
+## puts $ofile ";(ZAO \"POSTPROCESSOR\", MOSCOW, 2014)"
+
+
+set PI      [expr {2.0 * asin(1.0)}]               ; # Value of PI
+set RAD2DEG [expr {90.0 / asin(1.0)}]              ; # Multiplier to convert radians to degrees
+set DEG2RAD [expr {asin(1.0) / 90.0}]              ; # Multiplier to convert degrees to radians
+
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "CALC_ANGLES"
+
+ set B1 $mom_out_angle_pos(0)
+ set C1 $mom_out_angle_pos(1)
+
+ if {$B1 == 90.} {
+   set B2 180.0 ; 
+   set C2 [ expr $C1 - 90.0 ] ;
+ } else {
+   set dy [ expr cos( $B1 * 3.1415926 / 180.0 ) ]
+   set y  [ expr (1.0 - $dy) ]
+   set x  [ expr sqrt(($dy*2.0) * (1.0-$dy)) ]
+   set C0 [ expr acos($dy*2.0 - 1.0)  * 180.0 / 3.1415926 ]
+   set B0 [ expr atan2($y, $x) * 180.0 / 3.1415926 ]
+   set B0 [ expr $B1 - $B0 ]
+   if {$B0 > $B1} { set B0 [ expr $B0 + 180.0 ] } 		
+   set B2 $B0 ; 
+   set C2 $C0 ;
+ }
+
+ set b [ format "%.3lf" $B2 ]
+ set c [ format "%.3lf" $C2 ]
+
+MOM_output_literal "G0 B${b} C=DC(${c}+SHIFT_ANGLE)"
+## =======================================
+
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "PLANE_moving"
+global mom_mcs_goto
+set x [ format "%.3lf" $mom_mcs_goto(0) ]
+set y [ format "%.3lf" $mom_mcs_goto(1) ]
+set z [ format "%.3lf" $mom_mcs_goto(2) ]
+MOM_output_literal "G0 X${x} Y${y}"
+## =======================================
+
+
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "PLANE"
+
+set y [ format "%.3lf" $mom_out_angle_pos(0) ]
+set z [ format "%.3lf" $mom_out_angle_pos(1) ]
+MOM_output_literal "AROT Z${z} Y${y}"
+## =======================================
+
+
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "FOR_ROT"
+MOM_output_literal "ROT"
+## =======================================
+
+set mom_kin_4th_axis_plane "ZX"
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "M128_init_zero"
+set mom_kin_4th_axis_vector(0) 0.0
+set mom_kin_4th_axis_vector(1) 1.0
+set mom_kin_4th_axis_vector(2) 0.0
+## =======================================
+
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "INPUT_ZERO"
+set mom_zero "54"
+## =======================================
+
+set mom_kin_4th_axis_plane "Other"
+## =======================================
+## EXTN_rtv_mom_cp_part_attr "M128_init"
+set mom_kin_4th_axis_vector(0) 0.0
+set mom_kin_4th_axis_vector(1) 0.7071067811865
+set mom_kin_4th_axis_vector(2) 0.7071067811865
+MOM_reload_kinematics
+## =======================================
+
+
+	
+------------------------------------------
+
+pi = 2*90 = 180
+x  = a
+x = pi*a/(180)
+
+
+
+Это обычный вещественный формат double precision (qword 64 бит = 8 байт) без старшего байта 40h
+
+https://ru.wikipedia.org/wiki/%D0%A7%D0%B8%D1%81%D0%BB%D0%BE_%D0%B4%D0%B2%D0%BE%D0%B9%D0%BD%D0%BE%D0%B9_%D1%82%D0%BE%D1%87%D0%BD%D0%BE%D1%81%D1%82%D0%B8
+
++const float64 float64_value_90      = BX_CONST64(0x4056800000000000);
++const float64 float64_pi_half       = BX_CONST64(0x3ff921fb54442d18);
+
+qword_180007F10 dq 3FE6A09E667F2889h  = 0.707106781 = sqrt(2)/2 
+
+
+0xBFE6A09E667F3B89   =-0.707106781 = -sqrt(2)/2 
+
+ qword_180007F20 dq 4000000000000000h      ;Constant 0x4000000000000000 = 2.0 (decimal).
+ qword_180007F30 dq 3FF0000000000000h     = 1   1.0 = 3F800000h/3FF0000000000000h/3FFF8000000000000000h
+ qword_180007F40 dq 400921FB54442D18h    = pi
+ qword_180007F50 dq 4066800000000000h     == 0x4066800000000000 == 180.0
+ qword_180007F60 dq 4056800000000000h    = 90
+
+0x4076800000000000 = 360
+
+.text:00000001800016B9                 ; "out_angle_pos" 0 var_320
+.text:00000001800016E0                 ; "out_angle_pos" 1 var_318
+.text:00000001800016FE                 if var_320 <> 90  short loc_18000173A
+.text:000000018000171B                 var_80 = var_318 - 90
+.text:000000018000172C                 var_78 = 180
+                                       else 
+.text:000000018000173A ; ---------------------------------------------------------------------------
+.text:000000018000173A loc_18000173A: 
+
+.text:0000000180001758                 var_68 = cos ( var_320 * 3.1415926 / 180 )
+.text:0000000180001772                 var_60 = 1 - var_68
+.text:00000001800017A6                 var_58 = sqrt [  (var_68*2) * (1-var_68) ]
+.text:00000001800017DD                 var_78 = acos(var_68*2 - 1)  * 180 / 3.1415926
+.text:000000018000180D                 var_70 = atan2(var_60, var_58) * 180 / 3.1415926
+.text:0000000180001828                 var_80 = var_318 - var_70
+.text:0000000180001835                 if var_80 <= var_320 short loc_18000185A
+.text:0000000180001840                 var_80 = var_80 + 180 
+.text:000000018000185A ; ---------------------------------------------------------------------------
+.text:000000018000185A loc_18000185A:                          
+.text:000000018000185A 
+.text:0000000180001863                 C = var_80
+.text:0000000180001869                 B = var_78
+.text:0000000180001877                 "MOM_output_literal \"G0 B%.3lf C=DC(%.3"
+  
+
+
+
