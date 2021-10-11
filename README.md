@@ -4,7 +4,7 @@
 ____
 
 The part up to the processor for DMU160FD duoBlock (840D) - 2015 year.
-Exporting function EXTN_rtv_mom_cp_part_attr
+- Exporting function EXTN_rtv_mom_cp_part_attr
 
 ```
 EXTN_rtv_mom_cp_part_attr PLANE
