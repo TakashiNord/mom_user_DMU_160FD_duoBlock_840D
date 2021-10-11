@@ -1,8 +1,12 @@
 # mom_user_DMU_160FD_duoBlock_840D
  mom_user for DMU160FD duoBlock (840D)
 
-mom_user for DMU160FD duoBlock (840D) - 2015 year
+____
 
+The part up to the processor for DMU160FD duoBlock (840D) - 2015 year.
+Exporting function EXTN_rtv_mom_cp_part_attr
+
+```
 EXTN_rtv_mom_cp_part_attr PLANE
 EXTN_rtv_mom_cp_part_attr PLANE_moving
 EXTN_rtv_mom_cp_part_attr INPUT_ZERO
@@ -12,4 +16,6 @@ EXTN_rtv_mom_cp_part_attr M128_init
 EXTN_rtv_mom_cp_part_attr FOR_ROT
 EXTN_rtv_mom_cp_part_attr M128_init_zero
 EXTN_rtv_mom_cp_part_attr UNLOAD
+```
 
+____
