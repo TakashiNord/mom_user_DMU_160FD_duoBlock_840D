@@ -3,8 +3,10 @@
 
 ____
 
-The part up to the processor for DMU160FD duoBlock (840D) - 2015 year.
-- Exporting function EXTN_rtv_mom_cp_part_attr
+The part of the postprocessor for DMU160FD duoBlock (840D) - 2015 year.
+- CAD\CAM\CAE : Unigraphics
+- parts postprocessor: tcl, def and dll
+- Exporting function dll : EXTN_rtv_mom_cp_part_attr
 
 ```
 EXTN_rtv_mom_cp_part_attr PLANE
